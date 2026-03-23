@@ -54,7 +54,8 @@ input,textarea{font-family:inherit;outline:none}
 <script>
 const SUPABASE_URL='https://nxnlnmiccmhtmmphfcet.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54bmxubWljY21odG1tcGhmY2V0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxNzk0NzgsImV4cCI6MjA4OTc1NTQ3OH0.mDBh5WDTDLIKCQNz9Od5dQiA6vrDVT8TASrMrMxQfao';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let sb;
+try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)}catch(e){console.error('Supabase SDK not loaded:',e);sb=null}
 
 // ============================================================
 // QUESTIONS — v3 (30) + v4 (85) + v5 (50) + v6 (50) + v7 (315) = 520 total
@@ -1118,6 +1119,7 @@ let S={
 function set(u){Object.assign(S,u);R()}
 
 async function loadUD(){
+  if(!sb){set({cards:{},exams:[],v:'home'});return}
   const{data:cr}=await sb.from('card_states').select('*').eq('user_id',S.user.id);
   const cards={};QS.forEach(q=>{cards[q.id]=initSR()});
   if(cr)cr.forEach(r=>{cards[r.card_id]={ease:r.ease,interval:r.interval,reps:r.reps,next:r.next_review,last:r.last_result}});
@@ -1125,15 +1127,18 @@ async function loadUD(){
   set({cards,exams:er||[],v:'home'});
 }
 async function saveC(cid,cs){
+  if(!sb||!S.user)return;
   await sb.from('card_states').upsert({user_id:S.user.id,card_id:cid,ease:cs.ease,interval:cs.interval,reps:cs.reps,next_review:cs.next,last_result:cs.last,updated_at:new Date().toISOString()},{onConflict:'user_id,card_id'});
   set({sv:'✓'});setTimeout(()=>set({sv:''}),1500);
 }
 async function saveE(ec,cac,tot,tu){
+  if(!sb||!S.user)return;
   const{data}=await sb.from('exam_history').insert({user_id:S.user.id,score_ec:ec,score_cac:cac,score_total:tot,time_used:tu}).select();
   if(data)set({exams:[...S.exams,...data]});
 }
 
 async function doAuth(){
+  if(!sb){set({aErr:'Service indisponible. Réessayez plus tard.',aLoad:false});return}
   set({aLoad:true,aErr:''});
   try{
     if(S.am==='login'){const{error}=await sb.auth.signInWithPassword({email:S.ae,password:S.ap});if(error)throw error}
@@ -1141,11 +1146,15 @@ async function doAuth(){
   }catch(e){set({aErr:e.message,aLoad:false});return}
   set({aLoad:false});
 }
-async function logout(){await sb.auth.signOut();set({user:null,v:'auth',cards:{},exams:[]})}
+async function logout(){if(sb)await sb.auth.signOut();set({user:null,v:'auth',cards:{},exams:[]})}
+if(sb){
 sb.auth.onAuthStateChange(async(_,session)=>{
-  if(session?.user){set({user:session.user,v:'loading'});await loadUD()}
+  if(session?.user){set({user:session.user,v:'loading'});try{await loadUD()}catch(e){console.error('Load error:',e);set({v:'home',cards:{}})}}
   else set({user:null,v:'auth'})
 });
+}
+// Fallback: if Supabase doesn't respond within 5s, show auth screen
+setTimeout(()=>{if(S.v==='loading')set({v:'auth'})},5000);
 
 // ============================================================
 // GAME LOGIC
