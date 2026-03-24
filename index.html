@@ -1205,6 +1205,7 @@ function pickN(){
 
 function startAnnale(session){
   const sessionMap={'Mai 2021':'DEC Mai 2021','Nov 2021':'DEC Nov 2021','Mai 2022':'DEC Mai 2022','Nov 2022':'DEC Nov 2022','Mai 2023':'DEC Mai 2023','Nov 2023':'DEC Nov 2023','Mai 2024':'DEC Mai 2024','Nov 2024':'DEC Nov 2024','Mai 2025':'DEC Mai 2025','Nov 2025':'DEC Nov 2025'};
+  const qcmSessions=['Mai 2023','Nov 2024','Nov 2025'];
   const key=sessionMap[session]||session;
   const annaleQs=QS.filter(q=>(q.sr||'').includes(key));
   if(!annaleQs.length){alert('Pas de questions pour cette session');return}
@@ -1214,8 +1215,8 @@ function startAnnale(session){
   const eShuffles={};
   examQs.forEach(q=>{eShuffles[q.id]=shuffleChoices(q)});
   if(S.ti)clearInterval(S.ti);
-  const ti=setInterval(()=>{S.tmr--;if(S.tmr<=0){clearInterval(ti);finishE()}R()},1000);
-  set({eQs:examQs,eAns:{},eIdx:0,tmr:3600,eDone:false,eMode:'annale',eShuffles,eShowHelp:{},v:'exam',ti});
+  const ti=setInterval(()=>{S.tmr--;if(S.tmr<=0){clearInterval(ti);finishE();return}const te=document.getElementById('etmr');if(te){te.textContent='⏱ '+fmt(S.tmr);te.style.color=S.tmr<300?'var(--rd)':'var(--tx)'}},1000);
+  set({eQs:examQs,eAns:{},eIdx:0,tmr:3600,eDone:false,eMode:'annale',eAnnaleSession:session,eShuffles,eShowHelp:{},v:'exam',ti});
 }
 function rate(quality){
   if(!S.cur)return;
@@ -1234,7 +1235,7 @@ function startExam(mode){
   const eShuffles={};
   examQs.forEach(q=>{eShuffles[q.id]=shuffleChoices(q)});
   if(S.ti)clearInterval(S.ti);
-  const ti=setInterval(()=>{S.tmr--;if(S.tmr<=0){clearInterval(ti);finishE()}R()},1000);
+  const ti=setInterval(()=>{S.tmr--;if(S.tmr<=0){clearInterval(ti);finishE();return}const te=document.getElementById('etmr');if(te){te.textContent='⏱ '+fmt(S.tmr);te.style.color=S.tmr<300?'var(--rd)':'var(--tx)'}},1000);
   set({eQs:examQs,eAns:{},eIdx:0,tmr:3600,eDone:false,eMode:mode,eShuffles,eShowHelp:{},v:'exam',ti});
 }
 
@@ -1325,7 +1326,7 @@ function R(){
           <button class="bt bt2" style="font-size:12px;padding:12px 8px;background:linear-gradient(135deg,#a855f7,var(--pu))" data-em="qrc">QRC seul</button>
         </div>
         <div style="font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-top:10px;margin-bottom:2px">📝 Annales DEC (sessions réelles)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">${annaleSessions.map(s=>`<button class="bt bt3" style="font-size:11px;padding:9px 8px" data-an="${s}">${s}</button>`).join('')}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">${annaleSessions.map(s=>{const isQcm=['Mai 2023','Nov 2024','Nov 2025'].includes(s);const k='DEC '+s;const cnt=QS.filter(q=>(q.sr||'').includes(k)).length;return`<button class="bt bt3" style="font-size:11px;padding:9px 8px" data-an="${s}">${s} <span style="font-size:9px;color:${isQcm?'var(--gn)':'#a855f7'}">${isQcm?'QCM':'QRC'} (${cnt})</span></button>`}).join('')}</div>
         <button class="bt bt3" style="font-size:12px;padding:10px;opacity:.5;margin-top:6px" id="bl">Déconnexion</button>
       </div>
       <div style="margin-top:14px">
@@ -1437,7 +1438,7 @@ function R(){
     const q=S.eQs[S.eIdx],sh=S.eShuffles[q.id];
     const helpVisible=S.eShowHelp[q.id];
     $.innerHTML=`<div class="ctn">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:11px;color:var(--mu)">Q${S.eIdx+1}/${S.eQs.length}</div><div class="mn" style="font-size:17px;font-weight:700;color:${S.tmr<300?'var(--rd)':'var(--tx)'}">⏱ ${fmt(S.tmr)}</div><button style="padding:5px 12px;border-radius:8px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.1);color:var(--rd);font-size:11px;cursor:pointer;font-family:inherit" id="fe">Terminer</button></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:11px;color:var(--mu)">Q${S.eIdx+1}/${S.eQs.length}</div><div id="etmr" class="mn" style="font-size:17px;font-weight:700;color:${S.tmr<300?'var(--rd)':'var(--tx)'}">⏱ ${fmt(S.tmr)}</div><button style="padding:5px 12px;border-radius:8px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.1);color:var(--rd);font-size:11px;cursor:pointer;font-family:inherit" id="fe">Terminer</button></div>
       <div class="pb" style="margin-bottom:18px;height:3px"><div class="pf" style="width:${(S.eIdx+1)/S.eQs.length*100}%;background:linear-gradient(90deg,var(--bl),var(--pu))"></div></div>
       <div style="display:flex;gap:5px;margin-bottom:10px"><span class="tg tg-${q.p.toLowerCase()}">${q.p}</span><span class="tg" style="background:rgba(255,255,255,.06);color:var(--mu)">${q.th}</span><span class="tg tg-${q.ty}">${q.ty.toUpperCase()}</span></div>
       <div class="cd" style="margin-bottom:14px"><p style="font-size:15px;font-weight:500;line-height:1.5">${q.q}</p></div>
