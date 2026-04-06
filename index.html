@@ -585,9 +585,9 @@ const QS=[
 
 // ── DEC Nov 2024 CAC — Questions supplémentaires identifiées ──
 
-{id:"v7d10",sub:"EX03",p:"CAC",th:"Exercice",ty:"qrc",q:"Le barème d'heures figurant à l'article D.821-188 du code de commerce est-il applicable à la mission de certification des comptes annuels prévue à l'article L.821-46 du code de commerce (mission ALPE) ? Justifiez votre réponse.",a:"Non, le barème est spécifique à la mission de certification classique. Le barème d'heures de l'art. D.821-188 ne s'applique qu'à la mission de certification des comptes annuels classique. La mission ALPE (3 exercices) a ses propres modalités.",qn:11,sr:"C. com., art. D.821-188 / NEP 911 / DEC Nov 2024 Q11",pts:1,rt:"yn",yn:"non",kw:["non","certification classique|certification des comptes","ALPE","spécifique|pas applicable"]},
-{id:"v7d11",sub:"EX03",p:"CAC",th:"Exercice",ty:"qrc",q:"En cas de doute sur son appartenance à un réseau national ou international, quelle instance le commissaire aux comptes doit-il saisir ?",a:"La H2A. En cas de doute sur l'appartenance à un réseau, le CAC saisit la H2A qui est compétente pour apprécier cette situation au regard des critères de l'article 29 du code de déontologie.",qn:14,sr:"Code déonto. CAC, art. 29 / DEC Nov 2024 Q14",pts:1,rt:"def",kw:["H2A|Haute Autorité|Haute Autorité de l'Audit","réseau|appartenance","doute"]},
-{id:"v7d12",sub:"EX03",p:"CAC",th:"Exercice",ty:"qrc",q:"Quelle est la nature de l'assurance formulée par le commissaire aux comptes dans le cadre de la mission de certification des informations en matière de durabilité ?",a:"Une assurance modérée (limitée). Dans la phase initiale de la CSRD, la certification des informations de durabilité porte sur une assurance modérée (limitée). L'évolution vers une assurance raisonnable est prévue ultérieurement.",qn:16,sr:"Ord. 2023-1142 / CSRD / DEC Nov 2024 Q16",pts:1,rt:"def",kw:["modérée|assurance modérée|limitée","durabilité|CSRD","certification"]},
+{id:"v7d10",sub:"EX03",p:"CAC",th:"Exercice",ty:"qrc",q:"Le barème d'heures figurant à l'article D.821-188 du code de commerce est-il applicable à la mission de certification des comptes annuels prévue à l'article L.821-46 du code de commerce (mission ALPE) ? Justifiez votre réponse.",a:"Oui, le barème d'heures de l'art. D.821-188 s'applique à la mission ALPE. La mission ALPE ne fait pas partie des exclusions prévues par les articles R.821-193 et R.821-194 du Code de commerce. Le barème s'applique dans le cadre de la mission ALPE lorsque le commissaire aux comptes est désigné sur une durée de trois exercices.",qn:11,sr:"C. com., art. D.821-188 / NEP 911 / DEC Nov 2024 Q11",pts:1,rt:"yn",yn:"oui",kw:["oui","ALPE|L.821-46|mission ALPE","barème|barème d'heures","trois exercices|3 exercices","exclusions|pas exclu|R.821-193|R.821-194"]},
+{id:"v7d11",sub:"EX03",p:"CAC",th:"Exercice",ty:"qrc",q:"En cas de doute sur son appartenance à un réseau national ou international, quelle instance le commissaire aux comptes doit-il saisir ?",a:"La H2A. En cas de doute sur l'appartenance à un réseau, le CAC saisit la H2A qui est compétente pour apprécier cette situation au regard des critères de l'article 29 du code de déontologie.",qn:14,sr:"Code déonto. CAC, art. 29 / DEC Nov 2024 Q14",pts:1,rt:"def",kw:["H2A|Haute Autorité"]},
+{id:"v7d12",sub:"EX03",p:"CAC",th:"Exercice",ty:"qrc",q:"Quelle est la nature de l'assurance formulée par le commissaire aux comptes dans le cadre de la mission de certification des informations en matière de durabilité ?",a:"Une assurance modérée (limitée). Dans la phase initiale de la CSRD, la certification des informations de durabilité porte sur une assurance modérée (limitée). L'évolution vers une assurance raisonnable est prévue ultérieurement.",qn:16,sr:"Ord. 2023-1142 / CSRD / DEC Nov 2024 Q16",pts:1,rt:"def",kw:["modérée|limitée|assurance modérée|assurance limitée"]},
 
 // ── DEC Nov 2021 — Questions EC non encore couvertes ──
 
@@ -1681,7 +1681,7 @@ function R(){
           <button class="bt bt2" style="font-size:12px;padding:12px 8px;background:linear-gradient(135deg,#a855f7,var(--pu))" data-em="qrc">QRC seul</button>
         </div>
         <div style="font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-top:10px;margin-bottom:2px">📝 Annales DEC (sessions réelles)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">${annaleSessions.map(s=>{const isQcm=['Mai 2023','Nov 2024','Nov 2025'].includes(s);const k='DEC '+s;const cnt=QS.filter(q=>(q.sr||'').includes(k)).length;const complete=cnt>=20;const opacity=cnt<10?'opacity:.6':'';return`<button class="bt bt3" style="font-size:11px;padding:9px 8px;${opacity}" data-an="${s}">${s} <span style="font-size:9px;color:${isQcm?'var(--gn)':'#a855f7'}">${isQcm?'QCM':'QRC'}</span> <span style="font-size:9px;color:${complete?'var(--gn)':'var(--dm)'}">${cnt}/20</span></button>`}).join('')}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">${annaleSessions.map(s=>{const isQcm=['Mai 2023','Nov 2025'].includes(s);const k='DEC '+s;const cnt=QS.filter(q=>(q.sr||'').includes(k)).length;const complete=cnt>=20;const opacity=cnt<10?'opacity:.6':'';return`<button class="bt bt3" style="font-size:11px;padding:9px 8px;${opacity}" data-an="${s}">${s} <span style="font-size:9px;color:${isQcm?'var(--gn)':'#a855f7'}">${isQcm?'QCM':'QRC'}</span> <span style="font-size:9px;color:${complete?'var(--gn)':'var(--dm)'}">${cnt}/20</span></button>`}).join('')}</div>
         <button class="bt bt3" style="font-size:12px;padding:10px;margin-top:10px;border-color:rgba(239,68,68,.3);color:var(--rd)" id="breset">🔄 Réinitialiser la progression</button>
         <button class="bt bt3" style="font-size:12px;padding:10px;opacity:.5;margin-top:6px" id="bl">Déconnexion</button>
       </div>
@@ -1697,10 +1697,18 @@ function R(){
     document.querySelectorAll('[data-em]').forEach(b=>b.addEventListener('click',()=>startExam(b.dataset.em)));
     document.querySelectorAll('[data-an]').forEach(b=>b.addEventListener('click',()=>startAnnale(b.dataset.an)));
     document.getElementById('bl').addEventListener('click',logout);
-    document.getElementById('breset')?.addEventListener('click',()=>{
+    document.getElementById('breset')?.addEventListener('click',async()=>{
       if(confirm('⚠️ Réinitialiser toute la progression ?\n\nCette action supprimera :\n• Toutes les cartes de révision\n• L\'historique des examens blancs\n• Les statistiques de progression\n\nCette action est irréversible.')){
         if(confirm('Confirmez-vous la réinitialisation complète ?\n\nDernière chance avant suppression définitive.')){
-          S.cards={};S.exams=[];save();set({v:'home'});
+          // Reset local state
+          const freshCards={};QS.forEach(q=>{freshCards[q.id]=initSR()});
+          S.cards=freshCards;S.exams=[];
+          // Reset Supabase
+          if(sb&&S.user){
+            try{await sb.from('card_states').delete().eq('user_id',S.user.id)}catch(e){console.warn('reset cards failed:',e)}
+            try{await sb.from('exam_history').delete().eq('user_id',S.user.id)}catch(e){console.warn('reset exams failed:',e)}
+          }
+          set({v:'home'});
         }
       }
     });
@@ -1761,7 +1769,7 @@ function R(){
     document.querySelectorAll('[data-ci]').forEach(b=>b.addEventListener('click',()=>{S.flashPick=parseInt(b.dataset.ci);set({showAns:true})}));
     document.getElementById('bs')?.addEventListener('click',()=>set({showAns:true}));
     document.getElementById('hb')?.addEventListener('click',()=>set({showHelp:true}));
-    document.getElementById('qi')?.addEventListener('input',e=>S.qrcIn=e.target.value);
+    document.getElementById('qi')?.addEventListener('input',e=>{S.qrcIn=e.target.value;const btn=document.getElementById('bs');if(btn){btn.disabled=!S.qrcIn.trim();btn.style.background=S.qrcIn.trim()?'var(--pu)':'var(--dm)';btn.style.opacity=S.qrcIn.trim()?'1':'.5';btn.style.cursor=S.qrcIn.trim()?'pointer':'not-allowed';btn.textContent=S.qrcIn.trim()?'Voir la réponse':'Voir la réponse (rédigez d\'abord)'}});
     document.getElementById('ra')?.addEventListener('click',()=>rateAuto());
     document.getElementById('rg')?.addEventListener('click',()=>rate(0));
     return;
